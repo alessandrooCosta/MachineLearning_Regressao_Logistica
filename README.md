@@ -1,70 +1,96 @@
-# Previsão de Churn
+# MachineLearning - Regressão Logística
 
-Projeto simples para prever churn (cancelamento de clientes) usando um modelo de machine learning treinado e um scaler salvo. O repositório inclui um script de execução interativo (`main.py`) que carrega o modelo e o scaler, solicita duas entradas do usuário (meses de assinatura e horas assistidas) e retorna a previsão e a probabilidade de churn.
+Projeto de Machine Learning para prever o risco de churn (cancelamento) de clientes usando um modelo de regressão logística treinado e salvo em arquivos `.joblib`.
 
-## O que é este projeto
-Um exemplo educativo que demonstra como servir um modelo de classificação treinado em Python (scikit-learn) para prever se um cliente tem tendência a cancelar o serviço (churn) com base em duas variáveis: tempo de assinatura (meses) e horas assistidas.
+O sistema recebe duas variáveis do usuário:
+- `Meses_Assinatura`
+- `Horas_Assistidas`
 
-### Stack
-- **Linguagem(s):** Python
-- **Runtime:** Python 3.x
-- **Bibliotecas notáveis:** pandas, scikit-learn, joblib
+E retorna:
+- a previsão binária (`0` ou `1`)
+- o risco percentual de churn
 
-## Organização do repositório
+## Objetivo
+
+Este repositório demonstra de forma simples como:
+- treinar ou carregar um modelo de classificação;
+- aplicar pré-processamento com `StandardScaler`;
+- salvar e reutilizar artefatos de ML usando `joblib`;
+- construir uma interface de console para prever churn em tempo real.
+
+## Como o projeto funciona
+
+O script principal `main.py`:
+1. coleta os dados de entrada via console;
+2. carrega o scaler salvo em `scaler_churn.joblib`;
+3. transforma os dados de entrada;
+4. carrega o modelo treinado em `modelo_churn.joblib`;
+5. realiza a predição;
+6. exibe a decisão final e a probabilidade de churn.
+
+## Estrutura do repositório
+
+```text
+.
+├── .gitignore
+├── README.md
+├── main.py
+├── modelo_churn.joblib
+├── scaler_churn.joblib
+└── .idea/                  # arquivos locais de IDE (opcional)
 ```
-.gitignore        # Arquivos ignorados
-.idea/             # Configurações do IDE (PyCharm/IntelliJ)
-main.py            # Script principal (entrada CLI simples)
-modelo_churn.joblib # Modelo treinado (joblib)
-scaler_churn.joblib # Scaler usado para normalizar os dados (joblib)
-```
 
-Como funciona: `main.py` carrega `scaler_churn.joblib` para escalar as entradas fornecidas e então usa `modelo_churn.joblib` para prever 0 (cliente permanece) ou 1 (cliente cancela). A saída inclui também a probabilidade estimada de churn.
+## Requisitos
 
-## Como executar
-1. Clone o repositório
+- Python 3.9+
+- pip
+- pandas
+- scikit-learn
+- joblib
+
+## Instalação
+
+Clone o repositório:
 
 ```bash
 git clone https://github.com/alessandrooCosta/MachineLearning_Regress-o_Logistica.git
 cd MachineLearning_Regress-o_Logistica
 ```
 
-2. Crie um ambiente virtual e instale dependências
+Crie um ambiente virtual e instale as dependências:
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # macOS / Linux
-venv\Scripts\activate    # Windows (PowerShell)
+source venv/bin/activate   # Linux/macOS
+# ou no Windows:
+# venv\Scripts\activate
 
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install pandas scikit-learn joblib
 ```
 
-> Observação: não há um `requirements.txt` neste repositório — recomenda-se adicionar um para reprodutibilidade.
+## Execução
 
-3. Execute o script
+No diretório do projeto, execute:
 
 ```bash
 python main.py
 ```
 
-O script pedirá:
-- Quantos meses de assinatura o cliente possui?
-- Quantas horas assistidas o cliente possui?
+O programa pedirá duas informações:
 
-E então mostrará a previsão (CANCELAR ou CONTINUAR ATIVO) e a probabilidade de churn.
-
-## Formato de entrada e saída
-- Entrada: duas features numéricas (Meses_Assinatura, Horas_Assistidas)
-- Saída: previsão binária (0 = continuar ativo, 1 = cancelar) e probabilidade associada ao rótulo de churn.
-
-Exemplo de execução:
-
+```text
+Quantos meses de assitura este cliente possui ?
+Quantas horas de assistidas em cliente possui ?
 ```
+
+## Exemplo de saída
+
+```text
 Calculo de Churn!
 ------------------------
 Responda as perguntas a seguir
-Quantos meses de assitura este cliente possui ? 
+Quantos meses de assitura este cliente possui ?
 > 6
 Quantas horas de assistidas em cliente possui ?
 > 12
@@ -74,32 +100,53 @@ Previsão: O cliente tende a CONTINUAR ATIVO ✅
 Risco de Churn: 12.34%
 ```
 
-## Observações sobre os artefatos do modelo
-- modelo_churn.joblib: provavelmente um classificador do scikit-learn salvo com joblib.
-- scaler_churn.joblib: objeto scaler (por exemplo, StandardScaler) salvo com joblib para normalizar as entradas antes da predição.
+## Interpretação do resultado
 
-Esses arquivos são binários e não estão versionados de forma transparente — para garantir reprodutibilidade, adicione:
-- `requirements.txt` com versões exatas
-- um notebook ou script `train.py` que mostra como o modelo foi treinado e avaliado
-- uma descrição do conjunto de dados usado (colunas, amostragem, data)
+A previsão produz um resultado binário:
+
+- `0` → cliente continua ativo
+- `1` → cliente tende a cancelar
+
+A probabilidade de churn é calculada pelo modelo e exibida em porcentagem.
+
+## Artefatos do modelo
+
+### `modelo_churn.joblib`
+Arquivo que contém o modelo treinado de regressão logística já pronto para predição.
+
+### `scaler_churn.joblib`
+Arquivo que armazena o objeto de padronização utilizado para transformar os dados antes da previsão.
+
+## Observações
+
+Este projeto é um exemplo didático e pode ser expandido com:
+- `requirements.txt` para reprodutibilidade;
+- dataset real com documentação das colunas;
+- treinamento em um script separado (`train.py`);
+- validação de entradas e tratamentos de erro;
+- interface web ou API (`FastAPI`/`Flask`);
+- testes automatizados.
 
 ## Melhorias recomendadas
-- Adicionar `requirements.txt` ou `pyproject.toml`.
-- Incluir um notebook (`notebooks/`) com EDA e processo de treinamento.
-- Substituir entradas via `input()` por uma API (FastAPI/Flask) ou CLI com argumentos (argparse/click).
-- Salvar metadados do modelo (features usadas, versão, métricas) e criar testes automatizados.
-- Validar entradas do usuário (valores negativos/entrada inválida).
 
-## Segurança e licença
-- Este repositório não contém dados sensíveis visíveis, mas os modelos e dados devem ser tratados com cuidado para evitar vazamento de dados.
-- Licença: adicione uma licença (por exemplo MIT) se quiser permitir uso público.
+- adicionar `requirements.txt` com versões fixas das bibliotecas;
+- incluir notebook de análise exploratória;
+- separar treinamento e inferência em arquivos distintos;
+- salvar métricas e metadata do modelo;
+- transformar a aplicação em API REST ou CLI mais robusto.
 
-## Contato
-Autor: alessandrooCosta
+## Licença
+
+Este repositório não informa uma licença explícita. Se você pretende compartilhar publicamente o projeto, recomenda-se adicionar uma licença como MIT ou Apache 2.0.
+
+## Autor
+
+- alessandrooCosta
 
 ---
 
-Se quiser, eu posso:
-- adicionar automaticamente um `requirements.txt` com versões compatíveis;
-- criar um notebook de exemplo com EDA e treinamento fictício (se você fornecer o dataset);
-- transformar `main.py` numa API simples com FastAPI para testes locais.
+Se quiser, posso também criar:
+- um `requirements.txt`;
+- um script de treinamento (`train.py`);
+- uma versão com API em `FastAPI`;
+- um README ainda mais profissional em inglês ou em português, com badges e screenshots.
